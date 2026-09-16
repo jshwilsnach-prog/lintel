@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>0D chapel</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="dimensions.html">dimensions</a><a href="marks.html">marks</a></nav>
+    <p class="subtle">A point can hold a mark. It cannot hold a pile.</p>
+    <h1>0D</h1>
+    <canvas id="c" width="720" height="280"></canvas>
+    <div class="row">
+      <button data-m="rank">asRank</button>
+      <button data-m="rel">asRelation</button>
+      <button data-m="whole">asWhole</button>
+    </div>
+    <p id="note" class="mark" style="color:#3dffc8">the point is empty</p>
+  </main>
+  <script type="module">
+    import { asRank, asRelation, asWhole } from "../src/game/law.js";
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    let mark = null;
+    function draw() {
+      ctx.fillStyle="#07080f"; ctx.fillRect(0,0,720,280);
+      ctx.fillStyle = mark==="i" ? "#ff2bd6" : mark!=null ? "#3dffc8" : "#1c2a38";
+      ctx.beginPath(); ctx.arc(360,140,8,0,Math.PI*2); ctx.fill();
+    }
+    draw();
+    document.querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
+      const m = b.dataset.m;
+      mark = m==="rank" ? asRank(1e9) : m==="rel" ? asRelation("a famous address") : asWhole();
+      document.getElementById("note").textContent = "the point holds " + mark + ". a pile does not fit.";
+      draw();
+    });
+  </script>
+</body>
+</html>

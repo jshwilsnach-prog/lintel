@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unconstructible lamp</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="seven.html">seven</a><a href="lamps.html">lamps</a></nav>
+    <p class="subtle">Seven plus lamps.</p>
+    <h1>Unconstructible lamp</h1>
+    <p>You may light a lamp only after a compass arc that does not land on a seventh vertex. Sight can count. Construction cannot. Lit count still passes through asRank.</p>
+    <canvas id="c" width="720" height="420"></canvas>
+    <div class="row">
+      <button id="arc">Failed arc</button>
+      <button id="light">Light</button>
+      <button id="clear">Clear</button>
+    </div>
+    <p id="note" class="muted">No failed arc yet. The lamps stay dark.</p>
+  </main>
+  <script type="module">
+    import { asRank } from "../src/game/law.js";
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    const cx=360,cy=210,R=140;
+    let failed = false, lit = 0;
+    function draw() {
+      ctx.fillStyle = "#07080f"; ctx.fillRect(0,0,720,420);
+      ctx.strokeStyle = "#1c2a38"; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+      for (let i=0;i<7;i++) {
+        const t = -Math.PI/2 + i*Math.PI*2/7;
+        ctx.fillStyle = i < lit ? "#3dffc8" : "#0c1018";
+        ctx.beginPath(); ctx.arc(cx+Math.cos(t)*R, cy+Math.sin(t)*R, 8,0,Math.PI*2); ctx.fill();
+      }
+      if (failed) {
+        ctx.strokeStyle = "#ff2bd655";
+        ctx.beginPath(); ctx.arc(cx+40, cy-20, 90, 0.2, 4.2); ctx.stroke();
+      }
+    }
+    draw();
+    document.getElementById("arc").onclick = () => {
+      failed = true;
+      document.getElementById("note").textContent = "The arc missed the seventh vertex. That was knowable. A lamp may be lit.";
+      draw();
+    };
+    document.getElementById("light").onclick = () => {
+      if (!failed) {
+        document.getElementById("note").textContent = "No. Construction did not fail yet. Lighting would pretend the angle was made.";
+        return;
+      }
+      lit = Math.min(7, lit+1);
+      failed = false;
+      document.getElementById("note").textContent = lit + " lamps. asRank = " + asRank(lit) + ". Need another failed arc to light the next.";
+      draw();
+    };
+    document.getElementById("clear").onclick = () => {
+      failed = false; lit = 0;
+      document.getElementById("note").textContent = "Cleared. Rank is still 0.";
+      draw();
+    };
+  </script>
+</body>
+</html>

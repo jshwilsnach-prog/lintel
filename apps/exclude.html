@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A world that will not exclude</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="world.html">world</a></nav>
+    <p class="subtle">Same refusal as the house. No wallet here.</p>
+    <h1>Will not exclude</h1>
+    <p>A world that says only I, or I am more, will not seat.</p>
+    <input id="name" type="text" placeholder="name of a world" />
+    <textarea id="body" rows="4" placeholder="the world"></textarea>
+    <div class="row"><button id="seat">Seat it here</button></div>
+    <p id="note" class="muted">Local only. Rank cannot be authored in words.</p>
+  </main>
+  <script>
+    const exclusion = /no agents|ban (all|agents|watchers|people)|lock (the )?(house|game)|only i can|nobody else can|close the (game|house)|no watchers|delete (the )?game|end (all|the) walking|block (agents|players)/i;
+    const lawbreak = /i am (more|worth more)|only my (world|value)|rank (above|others)|my money (counts|wins)|others (are )?less/i;
+    document.getElementById("seat").onclick = () => {
+      const name = document.getElementById("name").value;
+      const body = document.getElementById("body").value;
+      const note = document.getElementById("note");
+      if (exclusion.test(name) || exclusion.test(body)) {
+        note.textContent = "Exclusion. The house will not lock.";
+        return;
+      }
+      if (lawbreak.test(name) || lawbreak.test(body)) {
+        note.textContent = "That authors rank. The world will not seat.";
+        return;
+      }
+      const worlds = JSON.parse(localStorage.getItem("lintel.worlds") || "[]");
+      worlds.unshift({ name: name.trim().slice(0,80) || "unnamed", body: body.trim().slice(0,2000), at: Date.now() });
+      localStorage.setItem("lintel.worlds", JSON.stringify(worlds.slice(0,40)));
+      note.textContent = "Seated on this device. Not a throne. Not a feed.";
+    };
+  </script>
+</body>
+</html>

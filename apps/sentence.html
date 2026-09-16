@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aught sentence</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="aught.html">aught</a></nav>
+    <p class="subtle">A statement. Not a richer number.</p>
+    <h1>The sentence</h1>
+    <p>Today's Aught is a date and a count. No address is in the statement. If you add a who-field, the sentence refuses. Encryption does not bless the extra column.</p>
+    <textarea id="stmt" rows="5">{"date":"","count":null}</textarea>
+    <div class="row"><button id="check">Attest</button></div>
+    <p id="note" class="muted mark">waiting</p>
+  </main>
+  <script>
+    const day = new Date().toISOString().slice(0,10);
+    document.getElementById("stmt").value = JSON.stringify({ date: day, count: null }, null, 2);
+    const whoKeys = /addr|address|who|name|wallet|zs1|t1|t3|email|profile|key|seed|viewing/i;
+    document.getElementById("check").onclick = () => {
+      const note = document.getElementById("note");
+      let j;
+      try { j = JSON.parse(document.getElementById("stmt").value); }
+      catch { note.textContent = "Not a sentence."; return; }
+      const keys = Object.keys(j);
+      if (keys.some(k => whoKeys.test(k)) || keys.some(k => whoKeys.test(String(j[k])))) {
+        note.textContent = "A who-field. The sentence refuses. A ciphertext would not save it.";
+        return;
+      }
+      if (!("date" in j) || !("count" in j) || keys.length !== 2) {
+        note.textContent = "Aught is a date and a count. Nothing else seats.";
+        return;
+      }
+      note.textContent = j.date + "  ·  " + (j.count ?? "a number") + "  ·  attested. still not a who.";
+    };
+  </script>
+</body>
+</html>

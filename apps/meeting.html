@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meeting, not a who</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="pi.html">two counts</a></nav>
+    <p class="subtle">Two counts, kept walking.</p>
+    <h1>A meeting</h1>
+    <p>Both walkers must keep going. When their phases pass, one local word may be written. If either has stopped, the meeting will not write. No list of meetings.</p>
+    <canvas id="c" width="720" height="360"></canvas>
+    <div class="row">
+      <button id="go">Keep walking</button>
+      <button id="stop">Stop one</button>
+    </div>
+    <input id="word" type="text" maxlength="40" placeholder="one word, this device only" />
+    <p id="note" class="muted">Waiting for a pass.</p>
+  </main>
+  <script>
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    let a=0,b=0, run=true, wrote=false, lastSign=1;
+    function step() {
+      if (run) { a += 0.017; b += 0.031; }
+      const d = Math.sin(a-b);
+      if (run && lastSign <= 0 && d > 0 && !wrote) {
+        const w = document.getElementById("word").value.trim();
+        if (w) {
+          localStorage.setItem("lintel.meeting", w);
+          document.getElementById("note").textContent = "They passed. The word stays here. Not a who.";
+          wrote = true;
+        } else {
+          document.getElementById("note").textContent = "They passed. No word was offered. The meeting still is not a who.";
+        }
+      }
+      lastSign = d;
+      ctx.fillStyle="#07080f"; ctx.fillRect(0,0,720,360);
+      ctx.strokeStyle="#1c2a38"; ctx.beginPath(); ctx.arc(360,180,120,0,Math.PI*2); ctx.stroke();
+      ctx.fillStyle="#3dffc8"; ctx.beginPath(); ctx.arc(360+Math.cos(a)*120,180+Math.sin(a)*120,6,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle="#ff2bd6"; ctx.beginPath(); ctx.arc(360+Math.cos(b)*120,180+Math.sin(b)*120,6,0,Math.PI*2); ctx.fill();
+      requestAnimationFrame(step);
+    }
+    document.getElementById("go").onclick = () => { run=true; wrote=false; document.getElementById("note").textContent="Walking."; };
+    document.getElementById("stop").onclick = () => { run=false; document.getElementById("note").textContent="One stopped. The wheel will not write."; };
+    const old = localStorage.getItem("lintel.meeting");
+    if (old) document.getElementById("word").value = old;
+    step();
+  </script>
+</body>
+</html>
