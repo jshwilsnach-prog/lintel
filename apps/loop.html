@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loop</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">1 to i to 0 in a loop.</p>
+    <h1>Loop</h1>
+    <p>Relation, whole, rank. The marks do not climb. They turn.</p>
+    <canvas id="c" width="720" height="420"></canvas>
+    <p id="note" class="muted mark">1 → i → 0 → 1</p>
+  </main>
+  <script type="module">
+    import { RANK, RELATION, WHOLE, sum } from "../src/game/law.js";
+    const marks = [RELATION, WHOLE, RANK];
+    const labels = ["1","i","0"];
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    let t = 0;
+    function draw() {
+      t += 0.01;
+      ctx.fillStyle = "#07080f"; ctx.fillRect(0,0,720,420);
+      const cx=360, cy=210, R=120;
+      ctx.strokeStyle = "#1c2a38"; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+      for (let i=0;i<3;i++) {
+        const a = -Math.PI/2 + i*Math.PI*2/3 + t;
+        const x = cx+Math.cos(a)*R, y = cy+Math.sin(a)*R;
+        ctx.fillStyle = i===1 ? "#ff2bd6" : "#3dffc8";
+        ctx.beginPath(); ctx.arc(x,y,10,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#dce8f0"; ctx.font = "22px Cormorant Garamond, serif"; ctx.textAlign="center";
+        ctx.fillText(labels[i], x, y-18);
+      }
+      const a = sum(sum(marks[0], marks[1]), marks[2]);
+      document.getElementById("note").textContent = "1 + i + 0 = " + a + "  ·  the loop does not mint rank";
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
