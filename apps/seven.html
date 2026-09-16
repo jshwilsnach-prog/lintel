@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A star that will not construct</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">Riddle.</p>
+    <h1>Seven</h1>
+    <p>Compass and unmarked straightedge refuse it. The twelve-month sky refuses it. Seven will not sit in three hundred and sixty. The four corners of the earth already do.</p>
+    <p class="muted">How does one draw a seven-pointed star with will? The house will not grade you. Sight can count seven lamps. It cannot construct the angle.</p>
+    <canvas id="c" width="720" height="720"></canvas>
+    <div class="row">
+      <button id="compass">Compass</button>
+      <button id="edge">Straightedge</button>
+      <button id="clear">Clear</button>
+      <button id="lamps">Count seven lamps</button>
+    </div>
+    <p id="note" class="muted">Classical tools only. 360 ÷ 7 is not constructible. Will is not a tool in the kit.</p>
+    <label class="muted" for="will">Answer with will</label>
+    <textarea id="will" rows="3" placeholder="What you said stays yours."></textarea>
+    <div class="row"><button id="keep">Keep it here</button></div>
+    <p id="kept" class="subtle"></p>
+  </main>
+  <script>
+    const c = document.getElementById("c");
+    const ctx = c.getContext("2d");
+    const cx = 360, cy = 360, R = 250;
+    let mode = "edge";
+    let pts = [];
+    let arcs = [];
+    let lines = [];
+    let showLamps = false;
+    function draw() {
+      ctx.fillStyle = "#07080f";
+      ctx.fillRect(0,0,720,720);
+      ctx.strokeStyle = "#1c2a38";
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+      ctx.strokeStyle = "#3dffc880";
+      ctx.lineWidth = 1;
+      for (const a of arcs) { ctx.beginPath(); ctx.arc(a.x,a.y,a.r,0,Math.PI*2); ctx.stroke(); }
+      ctx.strokeStyle = "#dce8f088";
+      for (const l of lines) { ctx.beginPath(); ctx.moveTo(l.x1,l.y1); ctx.lineTo(l.x2,l.y2); ctx.stroke(); }
+      ctx.fillStyle = "#3dffc8";
+      for (const p of pts) { ctx.beginPath(); ctx.arc(p.x,p.y,3,0,Math.PI*2); ctx.fill(); }
+      if (showLamps) {
+        for (let i=0;i<7;i++) {
+          const t = -Math.PI/2 + i*Math.PI*2/7;
+          const x = cx + Math.cos(t)*R, y = cy + Math.sin(t)*R;
+          ctx.fillStyle = "#ff2bd6";
+          ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill();
+          const j = (i+2)%7;
+          const t2 = -Math.PI/2 + j*Math.PI*2/7;
+          ctx.strokeStyle = "#ff2bd655";
+          ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(cx+Math.cos(t2)*R, cy+Math.sin(t2)*R); ctx.stroke();
+        }
+      }
+    }
+    draw();
+    document.getElementById("compass").onclick = () => mode = "compass";
+    document.getElementById("edge").onclick = () => mode = "edge";
+    document.getElementById("clear").onclick = () => { pts=[]; arcs=[]; lines=[]; showLamps=false; document.getElementById("note").textContent = "Cleared. The angle is still unconstructible."; draw(); };
+    document.getElementById("lamps").onclick = () => {
+      showLamps = true;
+      document.getElementById("note").textContent = "The eye can count seven lamps. It cannot construct the angle. That was knowable.";
+      draw();
+    };
+    let down = null;
+    c.onpointerdown = e => {
+      const r = c.getBoundingClientRect();
+      const x = (e.clientX-r.left)*720/r.width, y = (e.clientY-r.top)*720/r.height;
+      down = {x,y}; pts.push({x,y});
+    };
+    c.onpointerup = e => {
+      if (!down) return;
+      const r = c.getBoundingClientRect();
+      const x = (e.clientX-r.left)*720/r.width, y = (e.clientY-r.top)*720/r.height;
+      if (mode === "compass") {
+        const rad = Math.hypot(x-down.x, y-down.y) || 40;
+        arcs.push({x:down.x,y:down.y,r:rad});
+      } else {
+        lines.push({x1:down.x,y1:down.y,x2:x,y2:y});
+      }
+      down = null; draw();
+    };
+    document.getElementById("keep").onclick = () => {
+      const v = document.getElementById("will").value.trim();
+      if (!v) return;
+      localStorage.setItem("lintel.seven", v);
+      document.getElementById("kept").textContent = "You answered with will. The house will not grade it. What you said stays on this device.";
+    };
+    const old = localStorage.getItem("lintel.seven");
+    if (old) document.getElementById("will").value = old;
+  </script>
+</body>
+</html>

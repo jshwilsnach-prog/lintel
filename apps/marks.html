@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marks — 0, 1, i</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">The law has teeth here.</p>
+    <h1>0 · 1 · i</h1>
+    <p>Money in this house equals 0, or 1, or i. Unchanging. Not a score. Not a throne.</p>
+    <ul class="muted">
+      <li>0 — rank. Nobody more, nobody less. Any pile still returns 0.</li>
+      <li>1 — relation. Eye to eye. A name is ignored.</li>
+      <li>i — the whole. Orthogonal. Not spendable. i + i is still i.</li>
+    </ul>
+    <p>Try to author rank. The functions will not.</p>
+    <div class="row">
+      <label>pile <input id="pile" type="text" value="1000000" style="width:8rem" /></label>
+      <label>who <input id="who" type="text" value="a famous address" style="width:12rem" /></label>
+    </div>
+    <div class="row">
+      <button data-op="rank">asRank(pile)</button>
+      <button data-op="rel">asRelation(who)</button>
+      <button data-op="whole">asWhole()</button>
+    </div>
+    <p>sum</p>
+    <div class="row">
+      <button data-sum="0,0">0 + 0</button>
+      <button data-sum="0,1">0 + 1</button>
+      <button data-sum="1,1">1 + 1</button>
+      <button data-sum="1,i">1 + i</button>
+      <button data-sum="i,i">i + i</button>
+    </div>
+    <p>exchange</p>
+    <div class="row">
+      <button data-ex="0,1">0 → 1</button>
+      <button data-ex="1,0">1 → 0</button>
+      <button data-ex="i,1">i → 1</button>
+      <button data-ex="1,i">1 → i</button>
+    </div>
+    <p id="out" class="mark" style="font-size:1.6rem;color:#3dffc8">the ledger cannot forget</p>
+  </main>
+  <script type="module">
+    import { asRank, asRelation, asWhole, sum, exchange, RANK, RELATION, WHOLE } from "../src/game/law.js";
+    const out = document.getElementById("out");
+    document.querySelectorAll("[data-op]").forEach(b => b.onclick = () => {
+      const pile = Number(document.getElementById("pile").value) || 0;
+      const who = document.getElementById("who").value;
+      const op = b.dataset.op;
+      const v = op==="rank" ? asRank(pile) : op==="rel" ? asRelation(who) : asWhole();
+      out.textContent = op==="rank" ? `asRank(${pile}) = ${v}` : op==="rel" ? `asRelation(${JSON.stringify(who)}) = ${v}` : `asWhole() = ${v}`;
+    });
+    document.querySelectorAll("[data-sum]").forEach(b => b.onclick = () => {
+      const [a,c] = b.dataset.sum.split(",");
+      const map = {0:RANK,1:RELATION,i:WHOLE};
+      out.textContent = `${a} + ${c} = ${sum(map[a], map[c])}`;
+    });
+    document.querySelectorAll("[data-ex]").forEach(b => b.onclick = () => {
+      const [a,c] = b.dataset.ex.split(",");
+      const map = {0:RANK,1:RELATION,i:WHOLE};
+      const r = exchange(map[a], map[c]);
+      out.textContent = r === null ? `${a} cannot become ${c}` : `${a} stays ${r}`;
+    });
+  </script>
+</body>
+</html>

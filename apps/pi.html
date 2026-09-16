@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Two counts on a circle</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">Riddle.</p>
+    <h1>Two counts</h1>
+    <p>A line asked to become a world. No last digit. One being counts from a guessed end — a bound, not a finish. One being counts from the perfect now — the unit underfoot, not the whole circle.</p>
+    <p class="muted">If either stops, the wheel seizes. Two pits. A religion. If they keep walking, they figure a meeting, not a who.</p>
+    <canvas id="c" width="720" height="720"></canvas>
+    <div class="row">
+      <button id="go">Keep walking</button>
+      <button id="stopBound">Stop the bound</button>
+      <button id="stopNow">Stop the now</button>
+    </div>
+    <p id="note" class="muted mark">How is π known, if not by a last lamp?</p>
+    <textarea id="will" rows="3" placeholder="Answer with will. Stays on this device."></textarea>
+    <div class="row"><button id="keep">Keep it here</button></div>
+  </main>
+  <script>
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    const cx=360,cy=360,R=240;
+    let bound = 0, now = 0, run = true, seized = null;
+    let digits = "";
+    function step() {
+      if (run && seized === null) {
+        bound += 1;
+        const term = 4 * ((bound % 2 ? 1 : -1) / (2*bound - 1));
+        now += term;
+        digits = String(Math.abs(now));
+      }
+      draw();
+      requestAnimationFrame(step);
+    }
+    function draw() {
+      ctx.fillStyle = "#07080f"; ctx.fillRect(0,0,720,720);
+      ctx.strokeStyle = "#1c2a38"; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+      const a1 = bound * 0.017;
+      const a2 = now;
+      ctx.fillStyle = "#3dffc8";
+      ctx.beginPath(); ctx.arc(cx+Math.cos(a1)*R, cy+Math.sin(a1)*R, 6,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = "#ff2bd6";
+      ctx.beginPath(); ctx.arc(cx+Math.cos(a2)*R, cy+Math.sin(a2)*R, 6,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = "#dce8f0";
+      ctx.font = "28px Cormorant Garamond, serif";
+      ctx.textAlign = "center";
+      ctx.fillText(seized ? "the wheel seizes" : ("π ≈ " + digits.slice(0, 12)), cx, cy);
+      ctx.fillStyle = "#7a90a0";
+      ctx.font = "18px Cormorant Garamond, serif";
+      ctx.fillText("bound " + bound + "   ·   unit " + now.toFixed(6), cx, cy+36);
+    }
+    document.getElementById("go").onclick = () => { seized=null; run=true; document.getElementById("note").textContent = "They keep walking. A meeting, not a who. No last digit."; };
+    document.getElementById("stopBound").onclick = () => { seized="bound"; run=false; document.getElementById("note").textContent = "The end-counter believed they had finished. That was the downfall, named without being named."; };
+    document.getElementById("stopNow").onclick = () => { seized="now"; run=false; document.getElementById("note").textContent = "The now-counter took the unit for the world. The diameter is not the walk."; };
+    document.getElementById("keep").onclick = () => {
+      localStorage.setItem("lintel.pi", document.getElementById("will").value.trim());
+    };
+    const old = localStorage.getItem("lintel.pi"); if (old) document.getElementById("will").value = old;
+    step();
+  </script>
+</body>
+</html>
