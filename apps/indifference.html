@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Indifference</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="lamps.html">lamps</a></nav>
+    <p class="subtle">For the original familia. Help, theft, nothing. Rank stays 0.</p>
+    <h1>Indifference</h1>
+    <p>Three buttons. Each dims a lamp. The page will not keep a tally of which you chose beyond this breath.</p>
+    <canvas id="c" width="720" height="220"></canvas>
+    <div class="row">
+      <button data-k="help">help</button>
+      <button data-k="theft">theft</button>
+      <button data-k="nothing">nothing</button>
+    </div>
+    <p id="note" class="muted">the lamps are even</p>
+  </main>
+  <script type="module">
+    import { asRank } from "../src/game/law.js";
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    let lamps = [1,1,1];
+    function draw() {
+      ctx.fillStyle = "#07080f"; ctx.fillRect(0,0,720,220);
+      [180,360,540].forEach((x,i) => {
+        ctx.fillStyle = lamps[i] ? "#3dffc8" : "#12161e";
+        ctx.beginPath(); ctx.arc(x, 110, 18, 0, Math.PI*2); ctx.fill();
+      });
+    }
+    draw();
+    document.querySelectorAll("[data-k]").forEach(b => b.onclick = () => {
+      const i = { help:0, theft:1, nothing:2 }[b.dataset.k];
+      lamps[i] = lamps[i] ? 0 : 1;
+      const lit = lamps.reduce((a,x)=>a+x,0);
+      document.getElementById("note").textContent =
+        b.dataset.k + "  ·  lamps " + lit + "  ·  asRank = " + asRank(lit);
+      draw();
+    });
+  </script>
+</body>
+</html>

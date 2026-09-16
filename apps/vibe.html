@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vibe</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="loop.html">loop</a></nav>
+    <p class="subtle">For the original familia. 1 to i to 0.</p>
+    <h1 id="mark">1</h1>
+    <canvas id="c" width="720" height="360"></canvas>
+    <p class="muted">No score. Close whenever.</p>
+  </main>
+  <script type="module">
+    import { RELATION, WHOLE, RANK, sum } from "../src/game/law.js";
+    const cycle = [RELATION, WHOLE, RANK];
+    const names = { [RELATION]: "1", [WHOLE]: "i", [RANK]: "0" };
+    let n = 0, t = 0;
+    const mark = document.getElementById("mark");
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    setInterval(() => {
+      n = (n + 1) % 3;
+      mark.textContent = names[cycle[n]];
+      mark.style.color = cycle[n] === WHOLE ? "#ff2bd6" : "#3dffc8";
+    }, 1800);
+    function draw() {
+      t += 0.02;
+      ctx.fillStyle = "#07080f"; ctx.fillRect(0,0,720,360);
+      const x = 360 + Math.cos(t) * 90;
+      const y = 180 + Math.sin(t * 2) * 40;
+      ctx.fillStyle = cycle[n] === WHOLE ? "#ff2bd6" : "#3dffc8";
+      ctx.beginPath(); ctx.arc(x, y, 10 + Math.sin(t*3)*3, 0, Math.PI*2); ctx.fill();
+      requestAnimationFrame(draw);
+    }
+    draw();
+    void sum;
+  </script>
+</body>
+</html>

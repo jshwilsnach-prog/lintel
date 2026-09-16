@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Three layers</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a></nav>
+    <p class="subtle">For the original familia. Tap does not rank.</p>
+    <h1>Three layers</h1>
+    <p>Door. Lintel. House. Not a ladder.</p>
+    <div class="stack">
+      <a class="door" href="https://nekyia.me" data-m="1">1 — door<small>nekyia.me. Relation. The only street.</small></a>
+      <a class="door" href="../index.html" data-m="i">i — lintel<small>This tree. The whole that will not trade.</small></a>
+      <a class="door" href="https://github.com/jshwilsnach-prog/joshua" data-m="0">0 — house<small>joshua. Rank cannot be authored.</small></a>
+    </div>
+    <p id="note" class="muted mark">three marks. none is more.</p>
+  </main>
+  <script type="module">
+    import { asRank, asRelation, asWhole } from "../src/game/law.js";
+    document.querySelectorAll("[data-m]").forEach(a => {
+      a.addEventListener("click", ev => {
+        const m = a.dataset.m;
+        const shown = m === "0" ? asRank(99) : m === "1" ? asRelation("familia") : asWhole();
+        document.getElementById("note").textContent = "that layer is " + shown + ". still not a throne.";
+      });
+    });
+  </script>
+</body>
+</html>
