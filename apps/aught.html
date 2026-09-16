@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aught</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">Proof of work that links to Nekyia.</p>
+    <h1>Aught</h1>
+    <p>A UTC date and a whole number. Opening the play door is the work. Not a who. Privacy outranks a richer number.</p>
+    <p id="tally" class="mark" style="font-size:2rem;color:#3dffc8">listening</p>
+    <p id="note" class="muted">If the live tally cannot sit here, the stance still holds.</p>
+    <div class="stack">
+      <a class="door" href="https://nekyia.me">Open the door<small>That is the work.</small></a>
+    </div>
+  </main>
+  <script>
+    const el = document.getElementById("tally");
+    const note = document.getElementById("note");
+    const day = new Date().toISOString().slice(0,10);
+    fetch("https://nekyia.me/api/aught").then(r => r.json()).then(j => {
+      const date = j.date || j.day || j.utc || day;
+      const n = j.count ?? j.n ?? j.aught ?? j.value;
+      el.textContent = date + "  \u00b7  " + (n ?? "a number");
+      note.textContent = "A number, not a who. Even a perfect proof would not name a walker.";
+    }).catch(() => {
+      el.textContent = day + "  \u00b7  the door still opens";
+      note.textContent = "This page does not invent a richer number. Descend at nekyia.me.";
+    });
+  </script>
+</body>
+</html>

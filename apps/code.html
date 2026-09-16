@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>URL code</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">The word in the world is the code.</p>
+    <h1>nekyia.me</h1>
+    <p>A QR that points at a vendor is still a vendor. The door is a name you bought. Public. Independent.</p>
+    <svg id="mark" viewBox="0 0 21 21" width="220" height="220" style="background:#dce8f0;padding:12px;border-radius:8px"></svg>
+    <p class="muted mark" style="margin-top:1rem">https://nekyia.me</p>
+    <p class="muted">Print the letters. Recite them. This page draws a mark for the door — generated here, not rented.</p>
+    <div class="row">
+      <button data-u="https://nekyia.me">Door</button>
+      <button data-u="">This tree</button>
+    </div>
+    <p id="which" class="subtle">Door.</p>
+  </main>
+  <script>
+    function qrMatrix(text) {
+      const n = 21;
+      const m = Array.from({length:n},()=>Array(n).fill(0));
+      function finder(x,y){
+        for(let i=0;i<7;i++) for(let j=0;j<7;j++){
+          const edge = i===0||i===6||j===0||j===6;
+          const core = i>=2&&i<=4&&j>=2&&j<=4;
+          m[y+i][x+j] = edge||core ? 1 : 0;
+        }
+      }
+      finder(0,0); finder(n-7,0); finder(0,n-7);
+      let h = 0;
+      for (let i=0;i<text.length;i++) h = (h*33 + text.charCodeAt(i)) >>> 0;
+      for (let y=0;y<n;y++) for (let x=0;x<n;x++) {
+        if ((x<8&&y<8)||(x>=n-8&&y<8)||(x<8&&y>=n-8)) continue;
+        const bit = ((h + x*17 + y*29 + text.charCodeAt((x*y+x+y)%text.length)) >> ((x+y)&7)) & 1;
+        m[y][x] = bit;
+      }
+      for (let i=8;i<n-8;i++) { m[6][i] = i%2?0:1; m[i][6] = i%2?0:1; }
+      return m;
+    }
+    function render(url) {
+      const m = qrMatrix(url);
+      document.getElementById("mark").innerHTML = m.map((row,y)=>row.map((v,x)=> v ? `<rect x="${x}" y="${y}" width="1" height="1" fill="#05060c"/>` : "").join("")).join("");
+      document.getElementById("which").textContent = url;
+    }
+    const tree = location.href.replace(/apps\/code\.html.*$/,"") || location.origin + "/";
+    render("https://nekyia.me");
+    document.querySelectorAll("button[data-u]").forEach(b => b.onclick = () => render(b.dataset.u || tree));
+  </script>
+</body>
+</html>

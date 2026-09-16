@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seven lamps</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">No score.</p>
+    <h1>Lamps</h1>
+    <p>Sight can count seven. Lighting them is not a rank. Close whenever.</p>
+    <div id="ring" style="position:relative;width:min(72vw,420px);height:min(72vw,420px);margin:2rem auto"></div>
+    <p id="note" class="muted" style="text-align:center">0 lamps lit. Still 0.</p>
+  </main>
+  <script type="module">
+    import { asRank } from "../src/game/law.js";
+    const ring = document.getElementById("ring");
+    const note = document.getElementById("note");
+    const lit = Array(7).fill(false);
+    for (let i=0;i<7;i++) {
+      const b = document.createElement("button");
+      const t = -Math.PI/2 + i*Math.PI*2/7;
+      b.style.cssText = `position:absolute;left:50%;top:50%;width:52px;height:52px;border-radius:50%;
+        transform:translate(-50%,-50%) translate(${Math.cos(t)*160}px,${Math.sin(t)*160}px);
+        background:#0c1018;border:1px solid #1c2a38`;
+      b.onclick = () => {
+        lit[i] = !lit[i];
+        b.style.background = lit[i] ? "#3dffc8" : "#0c1018";
+        b.style.boxShadow = lit[i] ? "0 0 24px #3dffc888" : "none";
+        const n = lit.filter(Boolean).length;
+        note.textContent = n + " lamps lit. asRank(" + n + ") = " + asRank(n) + ".";
+      };
+      ring.appendChild(b);
+    }
+  </script>
+</body>
+</html>
