@@ -18,8 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Stage the tree
+        run: |
+          mkdir -p _site/apps _site/css _site/src/game
+          cp index.html .nojekyll _site/
+          cp apps/*.html _site/apps/
+          cp css/house.css _site/css/
+          cp src/game/law.js _site/src/game/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
