@@ -11,17 +11,28 @@ You cannot GitHub-fork a repo onto the same account. This folder is the fork in 
 
 ## Rooms
 
-- `/` — the tree (link-in-bio that is not a vendor)
+- `/` — the tree
 - `/apps/seven` — a star that will not construct
 - `/apps/pi` — two counts on a circle
 - `/apps/marks` — 0, 1, i
 - `/apps/lamps` — seven lamps, no score
+- `/apps/dimensions` — 3D 2D 1D 0D
+- `/apps/loop` — 1 to i to 0
 - `/apps/world` — a world that is yours
 - `/apps/stone` — two marks
 - `/apps/watch` — presence without a who
 - `/apps/aught` — a date and a count
 - `/apps/grate` — spare key for agents
 - `/apps/code` — the URL is the code
+
+## Rooms on rooms
+
+- `/apps/unlamp` — light only after a failed seventh vertex
+- `/apps/meeting` — two counts; a pass may write one local word
+- `/apps/chapel` — 0D; a point holds a mark
+- `/apps/exclude` — a world that will not exclude
+- `/apps/key` — spare key card
+- `/apps/sentence` — Aught is a date and a count; a who-field refuses
 
 Not a maze of products. Three layers still hold: door, lintel, house.
 
