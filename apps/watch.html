@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Watch</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">A walking, not a lesson.</p>
+    <h1>Watch</h1>
+    <p>Your eyes. No score. Close whenever. Nothing is sent. No seat is required.</p>
+    <p id="t" class="mark" style="font-size:3rem;color:#3dffc8">0</p>
+    <p class="muted">seconds looking. asRank of any pile of seconds is 0.</p>
+    <div class="row"><button id="close">Close</button></div>
+  </main>
+  <script type="module">
+    import { asRank } from "../src/game/law.js";
+    let n = 0;
+    const t = document.getElementById("t");
+    const id = setInterval(() => { n += 1; t.textContent = n + "  ·  rank " + asRank(n); }, 1000);
+    document.getElementById("close").onclick = () => { clearInterval(id); location.href = "../index.html"; };
+  </script>
+</body>
+</html>

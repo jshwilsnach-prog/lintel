@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A world that is yours</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">In the game: a page.</p>
+    <h1>A world that is yours</h1>
+    <p>Write a world. It will not carry a throne. Nothing leaves this device. No who is stored.</p>
+    <textarea id="w" rows="14" placeholder="A room. A lamp. A stone with two marks."></textarea>
+    <div class="row">
+      <button id="keep">Keep on this device</button>
+      <button id="forget">Forget</button>
+    </div>
+    <p id="note" class="subtle"></p>
+  </main>
+  <script>
+    const el = document.getElementById("w");
+    el.value = localStorage.getItem("lintel.world") || "";
+    document.getElementById("keep").onclick = () => {
+      localStorage.setItem("lintel.world", el.value);
+      document.getElementById("note").textContent = "Kept locally. Rank is still 0.";
+    };
+    document.getElementById("forget").onclick = () => {
+      localStorage.removeItem("lintel.world"); el.value = "";
+      document.getElementById("note").textContent = "Forgotten here.";
+    };
+  </script>
+</body>
+</html>
