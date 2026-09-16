@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap");
 :root {
   --bg: #05060c;
   --surface: #0c1018;
@@ -9,7 +8,7 @@
   --border: #1c2a38;
   --accent: #3dffc8;
   --ink: #ff2bd6;
-  --font: "Cormorant Garamond", "Palatino Linotype", Palatino, serif;
+  --font: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
 }
 * { box-sizing: border-box; }
 html, body { min-height: 100%; margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); }

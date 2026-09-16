@@ -21,7 +21,7 @@ jobs:
       - name: Stage the tree
         run: |
           mkdir -p _site/apps _site/css _site/src/game
-          cp index.html .nojekyll _site/
+          cp index.html .nojekyll 404.html _site/
           cp apps/*.html _site/apps/
           cp css/house.css _site/css/
           cp src/game/law.js _site/src/game/
