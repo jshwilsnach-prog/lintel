@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Remainder</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="seven.html">seven</a></nav>
+    <p class="subtle">For a brother. 360 will not sit in seven.</p>
+    <h1>Remainder</h1>
+    <p>Three hundred and sixty divided by seven leaves a sliver. The sliver is not a seventh point. It does not become a score.</p>
+    <canvas id="c" width="720" height="420"></canvas>
+    <p id="note" class="muted mark">360 ÷ 7 = 51 remainder 3</p>
+  </main>
+  <script type="module">
+    import { asRank } from "../src/game/law.js";
+    const c = document.getElementById("c"), ctx = c.getContext("2d");
+    const slice = (3 / 360) * Math.PI * 2;
+    let t = 0;
+    function draw() {
+      t += 0.01;
+      ctx.fillStyle = "#07080f"; ctx.fillRect(0,0,720,420);
+      const cx=360, cy=210, R=140;
+      ctx.strokeStyle = "#1c2a38"; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+      const a = -Math.PI/2 + Math.sin(t) * 0.15;
+      ctx.fillStyle = "#3dffc855";
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,a,a+slice); ctx.closePath(); ctx.fill();
+      requestAnimationFrame(draw);
+    }
+    document.getElementById("note").textContent =
+      "360 ÷ 7 = 51 remainder 3. asRank(3) = " + asRank(3) + ".";
+    draw();
+  </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forget</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="marks.html">marks</a></nav>
+    <p class="subtle">For a brother. The inputs vanish.</p>
+    <h1>Forget</h1>
+    <p>A pile. A name. A wish. The functions keep only the marks. Then the fields empty themselves. Nothing is stored.</p>
+    <label>pile <input id="pile" type="text" value="1000000" /></label>
+    <label>who <input id="who" type="text" value="" /></label>
+    <label>wish <input id="wish" type="text" value="" /></label>
+    <div class="row"><button id="run">See the marks</button></div>
+    <p id="out" class="mark" style="color:#3dffc8">the ledger cannot keep them</p>
+  </main>
+  <script type="module">
+    import { asRank, asRelation, asWhole } from "../src/game/law.js";
+    document.getElementById("run").onclick = () => {
+      const pile = Number(document.getElementById("pile").value) || 0;
+      const who = document.getElementById("who").value;
+      document.getElementById("out").textContent =
+        "asRank = " + asRank(pile) + "   asRelation = " + asRelation(who) + "   asWhole = " + asWhole();
+      document.getElementById("pile").value = "";
+      document.getElementById("who").value = "";
+      document.getElementById("wish").value = "";
+    };
+  </script>
+</body>
+</html>

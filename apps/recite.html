@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recite</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="https://nekyia.me">door</a></nav>
+    <p class="subtle">For a brother. Relation is 1.</p>
+    <h1>Recite</h1>
+    <p>The name in the world is the door. One letter. Wrong letter starts over. No vendor mark.</p>
+    <p id="shown" class="mark" style="font-size:2rem;letter-spacing:.2em;color:#3dffc8">_ _ _ _ _ _ . _ _</p>
+    <p id="note" class="muted">Type the name.</p>
+    <p id="open"></p>
+  </main>
+  <script>
+    const name = "nekyia.me";
+    let i = 0;
+    const shown = document.getElementById("shown");
+    const note = document.getElementById("note");
+    function paint() {
+      shown.textContent = name.split("").map((ch, n) => n < i ? ch : (ch === "." ? "." : "_")).join(" ");
+    }
+    paint();
+    window.addEventListener("keydown", e => {
+      if (e.key.length !== 1) return;
+      const want = name[i];
+      if (e.key.toLowerCase() === want) {
+        i += 1;
+        paint();
+        if (i === name.length) {
+          note.textContent = "The name is complete.";
+          document.getElementById("open").innerHTML = '<a class="door" href="https://nekyia.me">Descend<small>The only door.</small></a>';
+        } else note.textContent = "Yes.";
+      } else {
+        i = 0;
+        paint();
+        document.getElementById("open").innerHTML = "";
+        note.textContent = "Not that letter. Begin the name again.";
+      }
+    });
+  </script>
+</body>
+</html>

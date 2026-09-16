@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Null booth</title>
+  <link rel="stylesheet" href="../css/house.css" />
+</head>
+<body>
+  <main class="wrap">
+    <nav class="bar"><a href="../index.html">lintel</a><a href="marks.html">marks</a></nav>
+    <p class="subtle">For a brother. Nothing becomes i by trade.</p>
+    <h1>Null booth</h1>
+    <p>Pick a mark you hold. Pick a mark you want. Only identity prints a receipt.</p>
+    <p>from</p>
+    <div class="row">
+      <button data-from="0">0</button>
+      <button data-from="1">1</button>
+      <button data-from="i">i</button>
+    </div>
+    <p>to</p>
+    <div class="row">
+      <button data-to="0">0</button>
+      <button data-to="1">1</button>
+      <button data-to="i">i</button>
+    </div>
+    <div class="row"><button id="trade">Trade</button></div>
+    <p id="out" class="mark" style="font-size:2.4rem;color:#3dffc8">no receipt</p>
+  </main>
+  <script type="module">
+    import { RANK, RELATION, WHOLE, exchange } from "../src/game/law.js";
+    const map = { "0": RANK, "1": RELATION, i: WHOLE };
+    let from = "0", to = "1";
+    document.querySelectorAll("[data-from]").forEach(b => b.onclick = () => from = b.dataset.from);
+    document.querySelectorAll("[data-to]").forEach(b => b.onclick = () => to = b.dataset.to);
+    document.getElementById("trade").onclick = () => {
+      const r = exchange(map[from], map[to]);
+      document.getElementById("out").textContent = r === null ? "null" : String(r);
+    };
+  </script>
+</body>
+</html>
